@@ -150,18 +150,19 @@ public class CameraFragment extends Fragment {
     class TakePictureClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            cam.takePicture(null, null, new TakePictureCallback());
+            cam.takePicture(null, null, new TakePictureCallback(v));
         }
-
-        private Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
-            @Override
-            public void onAutoFocus(boolean success, Camera camera) {
-
-            }
-        };
     }
 
     class TakePictureCallback implements Camera.PictureCallback {
+
+        // Navigationに必要なview
+        private View view;
+
+        public TakePictureCallback(View view) {
+            this.view = view;
+        }
+
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             try {
@@ -177,10 +178,13 @@ public class CameraFragment extends Fragment {
                 FileOutputStream fos = new FileOutputStream(f);
                 //撮影データの書き込み
                 fos.write(data);
-                Toast.makeText(getContext(),
-                        "写真を送信しました", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "写真を送信しました", Toast.LENGTH_LONG).show();
                 fos.close();
                 cam.startPreview();
+
+                Navigation.findNavController(view).navigate(R.id.action_camera_to_result);
+
+                // todo 確か画像関係はエラーが出るのではなく処理が止まるので、URLができるまでここまでで書く。
 
                 //画像をbitmapに変換
                 Bitmap bm = BitmapFactory.decodeFile("/storage/emulated/0/Camera/img.jpg");
@@ -234,6 +238,7 @@ public class CameraFragment extends Fragment {
                 //objStr.toString();//返り値
                 in.close();
                 objBuf.close();
+
             } catch (Exception e) {
             }
         }
