@@ -109,22 +109,37 @@ public class CameraFragment extends Fragment {
     class TakePictureClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            cam.takePicture(null, null, new TakePictureCallback());
+            //オートフォーカス(機能してるかわからん)
+            cam.autoFocus(autoFocusCallback);
         }
+
+    private Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
+        @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                cam.takePicture(new Camera.ShutterCallback() {
+                    //シャッター音
+                    @Override
+                    public void onShutter() {}
+                }, null, new TakePictureCallback());
+            }
+        };
     }
 
     class TakePictureCallback implements Camera.PictureCallback {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             try {
+                //Cameraディレクトリ
                 File dir = new File(
                         Environment.getExternalStorageDirectory(), "Camera");
+                //なければ作る
                 if(!dir.exists()) {
                     dir.mkdir();
                 }
+                //img.jpgファイルの作成
                 File f = new File(dir, "img.jpg");
                 FileOutputStream fos = new FileOutputStream(f);
-                FileInputStream fis = new FileInputStream(f);
+                //撮影データの書き込み
                 fos.write(data);
                 Toast.makeText(getContext(),
                         "写真を送信しました", Toast.LENGTH_LONG).show();
@@ -139,8 +154,8 @@ public class CameraFragment extends Fragment {
                 bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] jpgarr = baos.toByteArray();
 
+                //jpeg変換後の値
                 Log.d("tag", jpgarr.toString());
-
 
                 //画像データを送信
                 String lineEnd = "\r\n";
