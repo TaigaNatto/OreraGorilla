@@ -45,15 +45,15 @@
                 android:id="@+id/help_btn"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/ic_help_outline_black_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="16dp"/>
+                app:layout_constraintVertical_bias="1.0" />
 
         </android.support.constraint.ConstraintLayout>
 

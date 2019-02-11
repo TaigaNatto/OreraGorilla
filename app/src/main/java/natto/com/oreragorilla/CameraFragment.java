@@ -34,6 +34,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.navigation.Navigation;
 import natto.com.oreragorilla.databinding.FragmentCameraBinding;
 
 public class CameraFragment extends Fragment {
@@ -86,6 +87,13 @@ public class CameraFragment extends Fragment {
             public void onClick(View view) {
                 //オートフォーカス(機能してるかわからん)
                 cam.autoFocus(null);
+            }
+        });
+
+        binding.helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_camera_to_license);
             }
         });
 
