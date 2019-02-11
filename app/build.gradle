@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 28
@@ -29,4 +30,19 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // firebase
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
+
+    // navigation
+    implementation "android.arch.navigation:navigation-fragment:1.0.0-alpha06"
+    implementation "android.arch.navigation:navigation-ui:1.0.0-alpha06"
+//    implementation "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-beta01"
+//    implementation "android.arch.navigation:navigation-fragment:1.0.0-beta01"
+//    implementation "android.arch.navigation:navigation-ui:1.0.0-beta01"
+//    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-beta01"
+//    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-beta01"
+//    implementation "android.arch.navigation:navigation-common-ktx:1.0.0-beta01"
+//    implementation "android.arch.navigation:navigation-runtime-ktx:1.0.0-beta01"
 }

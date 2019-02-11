@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- shape:oval(=楕円形) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- サイズを指定 -->
+    <size
+        android:width="106dp"
+        android:height="106dp"/>
+
+    <!-- 背景色 -->
+    <solid android:color="@color/ic_gorilla_background" />
+
+    <stroke android:width="6dp"
+        android:color="@color/ic_gorilla_black"/>
+
+
+</shape>

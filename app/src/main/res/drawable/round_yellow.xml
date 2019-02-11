@@ -5,8 +5,8 @@
 
     <!-- サイズを指定 -->
     <size
-        android:width="100dp"
-        android:height="100dp"/>
+        android:width="124dp"
+        android:height="124dp"/>
 
     <!-- 背景色 -->
     <solid android:color="#ffff00" />
