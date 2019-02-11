@@ -1,5 +1,6 @@
 package natto.com.oreragorilla;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -19,24 +20,19 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 
 import natto.com.oreragorilla.databinding.FragmentCameraBinding;
 
@@ -57,13 +53,13 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mId=SystemRepository.getDeviceId(Objects.requireNonNull(getContext()));
-        firebase=new FireBaseRepository(mId);
+        mId = SystemRepository.getDeviceId(Objects.requireNonNull(getContext()));
+        firebase = new FireBaseRepository(mId);
         firebase.setValueEventListener(new ValueEventListener() {
             @SuppressLint("ShowToast")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Toast.makeText(getContext(),dataSnapshot.child("imageUrl").getValue().toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), dataSnapshot.child("imageUrl").getValue().toString(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -76,10 +72,22 @@ public class CameraFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false);
 
-        binding.textCamera.setText("ほげ");
+        sv = new SurfaceView(getContext());
+        sh = sv.getHolder();
+        sh.addCallback(new SurfaceHolderCallback());
+
+        binding.picture.setOnClickListener(new TakePictureClickListener());
+
+        binding.camera.addView(sv);
+        binding.camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //オートフォーカス(機能してるかわからん)
+                cam.autoFocus(null);
+            }
+        });
 
         return binding.getRoot();
     }
@@ -93,6 +101,7 @@ public class CameraFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
     }
+
     class SurfaceHolderCallback implements SurfaceHolder.Callback {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
@@ -104,6 +113,7 @@ public class CameraFragment extends Fragment {
             param.setPictureSize(pictSize.width, pictSize.height);
             cam.setParameters(param);
         }
+
         @Override
         public void surfaceChanged(SurfaceHolder holder, int f, int w, int h) {
             try {
@@ -118,8 +128,10 @@ public class CameraFragment extends Fragment {
                 cam.setParameters(params);
                 // プレビュー開始
                 cam.startPreview();
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
         }
+
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             cam.stopPreview();
@@ -130,18 +142,13 @@ public class CameraFragment extends Fragment {
     class TakePictureClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            //オートフォーカス(機能してるかわからん)
-            cam.autoFocus(autoFocusCallback);
+            cam.takePicture(null, null, new TakePictureCallback());
         }
 
-    private Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
-        @Override
+        private Camera.AutoFocusCallback autoFocusCallback = new Camera.AutoFocusCallback() {
+            @Override
             public void onAutoFocus(boolean success, Camera camera) {
-                cam.takePicture(new Camera.ShutterCallback() {
-                    //シャッター音
-                    @Override
-                    public void onShutter() {}
-                }, null, new TakePictureCallback());
+
             }
         };
     }
@@ -154,7 +161,7 @@ public class CameraFragment extends Fragment {
                 File dir = new File(
                         Environment.getExternalStorageDirectory(), "Camera");
                 //なければ作る
-                if(!dir.exists()) {
+                if (!dir.exists()) {
                     dir.mkdir();
                 }
                 //img.jpgファイルの作成
@@ -181,18 +188,18 @@ public class CameraFragment extends Fragment {
                 //画像データを送信
                 String lineEnd = "\r\n";
                 String twoHyphens = "--";
-                String boundary =  "*****";
+                String boundary = "*****";
 
                 HttpURLConnection con = null;
                 URL url = new URL("");
-                con = (HttpURLConnection)url.openConnection();
+                con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("POST");
                 con.setRequestProperty("Connection", "Keep-Alive");
-                con.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+                con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                 con.setRequestProperty("Accept-Charset", "UTF-8");
                 con.setUseCaches(false);
 
-                DataOutputStream outputStream = new DataOutputStream( con.getOutputStream());
+                DataOutputStream outputStream = new DataOutputStream(con.getOutputStream());
                 outputStream.writeBytes(twoHyphens + boundary + lineEnd);
                 outputStream.writeBytes("Content-Disposition: form-data; name=\"filename\";" + lineEnd);
                 outputStream.writeBytes(lineEnd);
@@ -201,7 +208,7 @@ public class CameraFragment extends Fragment {
                 outputStream.writeBytes(twoHyphens + boundary + lineEnd);
                 outputStream.writeBytes("Content-Disposition: form-data; name=\"upfile\";filename=\"upfile.png\"" + lineEnd);
                 outputStream.writeBytes(lineEnd);
-                for(int i =  0 ; i < jpgarr.length;i++){
+                for (int i = 0; i < jpgarr.length; i++) {
                     outputStream.writeByte(jpgarr[i]);
                 }
                 outputStream.writeBytes(lineEnd);
@@ -219,7 +226,8 @@ public class CameraFragment extends Fragment {
                 //objStr.toString();//返り値
                 in.close();
                 objBuf.close();
-            } catch (Exception e) { }
+            } catch (Exception e) {
+            }
         }
     }
 }
