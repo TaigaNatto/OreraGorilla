@@ -24,6 +24,7 @@ public class ResultFragment extends Fragment {
     public ResultFragment() {
 
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +35,11 @@ public class ResultFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_result, container, false);
-        resultText="写真評価";
-        resultPictureURL="サイトのURL";
+        resultText = "写真評価";
+        resultPictureURL = "http://fuji-ch.cf/~ec2-user/Android_picture20190212102119.jpg";
 
-        final String gifUrl = resultPictureURL;
-        Glide.with(this).load(gifUrl).into(binding.resultPicture);
+        final String strUrl = resultPictureURL;
+        Glide.with(this).load(strUrl).into(binding.resultPicture);
 
         binding.resultText.setText(resultText);
 
@@ -55,7 +56,7 @@ public class ResultFragment extends Fragment {
                 //結果をシェア
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_TEXT, "私のゴリラ\n"+gifUrl);
+                i.putExtra(Intent.EXTRA_TEXT, resultText + "\n" + strUrl);
                 startActivity(Intent.createChooser(i, "結果をシェア！"));
             }
         });
@@ -63,6 +64,7 @@ public class ResultFragment extends Fragment {
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
