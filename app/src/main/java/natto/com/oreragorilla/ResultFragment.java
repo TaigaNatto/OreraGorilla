@@ -1,6 +1,7 @@
 package natto.com.oreragorilla;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,10 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+
 import androidx.navigation.Navigation;
 import natto.com.oreragorilla.databinding.FragmentResultBinding;
 
 public class ResultFragment extends Fragment {
+
+    public static String resultPictureURL;
+    public static String resultText;
 
     FragmentResultBinding binding;
 
@@ -26,12 +32,31 @@ public class ResultFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_result, container, false);
+        resultText="写真評価";
+        resultPictureURL="サイトのURL";
+
+        final String gifUrl = resultPictureURL;
+        Glide.with(this).load(gifUrl).into(binding.resultPicture);
+
+        binding.resultText.setText(resultText);
 
         binding.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_resultFragment_to_cameraFragment);
+            }
+        });
+
+        binding.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //結果をシェア
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, "私のゴリラ\n"+gifUrl);
+                startActivity(Intent.createChooser(i, "結果をシェア！"));
             }
         });
 
