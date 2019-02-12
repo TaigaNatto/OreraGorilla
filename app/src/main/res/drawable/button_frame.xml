@@ -7,4 +7,9 @@
         android:color="#FF000000" />
     <!-- 角の丸み -->
     <corners android:radius="6dp" />
+    <padding
+        android:left="10dip"
+        android:top="10dip"
+        android:right="10dip"
+        android:bottom="10dip" />
 </shape>
