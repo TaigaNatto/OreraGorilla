@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class PostBmpAsyncHttpRequest extends AsyncTask<Param, Void, String> {
     private Activity mActivity;
@@ -32,7 +33,6 @@ public class PostBmpAsyncHttpRequest extends AsyncTask<Param, Void, String> {
             ByteArrayOutputStream jpg = new ByteArrayOutputStream();
             param.bmp.compress(Bitmap.CompressFormat.JPEG, 100, jpg);
 
-
             URL url = new URL(param.uri);
             connection = (HttpURLConnection) url.openConnection();
             connection.setConnectTimeout(3000);//接続タイムアウトを設定する。
@@ -41,14 +41,19 @@ public class PostBmpAsyncHttpRequest extends AsyncTask<Param, Void, String> {
             //ヘッダーを設定する
             connection.setRequestProperty("User-Agent", "Android");
             connection.setRequestProperty("Content-Type","application/octet-stream");
+            //connection.setRequestProperty("Content-Type","multipart/form-data");
             connection.setDoInput(true);//リクエストのボディ送信を許可する
             connection.setDoOutput(true);//レスポンスのボディ受信を許可する
             connection.setUseCaches(false);//キャッシュを使用しない
             connection.connect();
 
+            String id=SystemRepository.getDeviceId(mActivity);
+            byte[] idByte=id.getBytes(StandardCharsets.UTF_8);
+
             // データを投げる
             OutputStream out = new BufferedOutputStream(connection.getOutputStream());
             out.write(jpg.toByteArray());
+            out.write(idByte);
             out.flush();
 
             // データを受け取る
