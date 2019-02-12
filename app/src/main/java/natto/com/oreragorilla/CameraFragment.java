@@ -59,7 +59,11 @@ public class CameraFragment extends Fragment {
                 String imageUrl = dataSnapshot.child("imageUrl").getValue().toString();
                 if (!imageUrl.isEmpty() && view != null) {
                     // データが空でなく、シャッターが押されている場合のみ遷移
-                    Navigation.findNavController(view).navigate(R.id.action_camera_to_result);
+                    float percent = Float.parseFloat(dataSnapshot.child("percent").getValue().toString());
+                    Bundle bundle = new Bundle();
+                    bundle.putString("imageUrl", imageUrl);
+                    bundle.putFloat("percent", percent);
+                    Navigation.findNavController(view).navigate(R.id.action_camera_to_result, bundle);
                     view = null;
                 }
             }

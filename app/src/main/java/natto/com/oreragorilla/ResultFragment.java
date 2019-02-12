@@ -35,8 +35,10 @@ public class ResultFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_result, container, false);
-        resultText = "写真評価";
-        resultPictureURL = "http://fuji-ch.cf/~ec2-user/Android_picture20190212102119.jpg";
+        float percent=getArguments().getFloat("percent");
+        String message=" | ゴリラになるならオレラゴリラ";
+        resultText = getReviewMessage(percent)+message;
+        resultPictureURL = getArguments().getString("imageUrl");
 
         final String strUrl = resultPictureURL;
         Glide.with(this).load(strUrl).into(binding.resultPicture);
@@ -73,5 +75,18 @@ public class ResultFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public String getReviewMessage(float percent){
+        if(percent>0.9){
+            return "完全にゴリラ。野生に帰りましょう。";
+        }else if(percent>0.75){
+            return "ほぼゴリラ。かろうじて人間を保ってる。";
+        } else if (percent > 0.5) {
+            return "わりとゴリラ。わりと似てる。";
+        }else if(percent>0.25){
+            return "ちょいゴリラ。自覚はない。";
+        }
+        return "ゴリラではない。人の世で生きていきましょう。";
     }
 }

@@ -17,7 +17,11 @@
             app:exitAnim="@anim/slide_to_right" />
         <action
             android:id="@+id/action_camera_to_result"
-            app:destination="@id/resultFragment" />
+            app:destination="@id/resultFragment" >
+            <argument
+                android:name="percent"
+                android:defaultValue="0.0" />
+        </action>
     </fragment>
 
     <fragment

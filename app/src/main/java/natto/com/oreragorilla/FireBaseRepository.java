@@ -8,17 +8,17 @@ public class FireBaseRepository {
 
     private DatabaseReference mRef;
 
-    public FireBaseRepository(String id){
+    public FireBaseRepository(String id) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference(id);
     }
 
-    public void initial(){
+    public void initial() {
         mRef.child("imageUrl").setValue("");
-        mRef.child("percent").setValue(0f);
+        mRef.child("percent").setValue(0.0f);
     }
 
-    public void setValueEventListener(ValueEventListener listener){
+    public void setValueEventListener(ValueEventListener listener) {
         mRef.addValueEventListener(listener);
     }
 }
