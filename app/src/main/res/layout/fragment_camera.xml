@@ -22,7 +22,7 @@
             android:id="@+id/camera_container"
             android:layout_width="0dp"
             android:layout_height="172dp"
-            android:background="@color/ic_gorilla_black"
+            android:background="@color/ic_gorilla_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
