@@ -1,6 +1,7 @@
 package natto.com.oreragorilla;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -30,6 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Objects;
 
@@ -171,6 +173,11 @@ public class CameraFragment extends Fragment {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             try {
+
+//                Camera.Size size=camera.getParameters().getPreviewSize();
+//                Bitmap bitmap = Bitmap.createBitmap( size.width, size.height, Bitmap.Config.ARGB_8888);
+//                bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(data));
+
                 //Cameraディレクトリ
                 File dir = new File(
                         Environment.getExternalStorageDirectory(), "Camera");
@@ -190,56 +197,59 @@ public class CameraFragment extends Fragment {
                 //画像をbitmapに変換
                 Bitmap bm = BitmapFactory.decodeFile("/storage/emulated/0/Camera/img.jpg");
 
-                //bitmapをjpegに変換
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] jpgarr = baos.toByteArray();
-
-                //jpeg変換後の値
-                Log.d("tag", jpgarr.toString());
-
-                //画像データを送信
-                String lineEnd = "\r\n";
-                String twoHyphens = "--";
-                String boundary = "*****";
-
-                HttpURLConnection con = null;
-                // FIXME URLがないとここで処理が停止する。
-                URL url = new URL("");
-                con = (HttpURLConnection) url.openConnection();
-                con.setRequestMethod("POST");
-                con.setRequestProperty("Connection", "Keep-Alive");
-                con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                con.setRequestProperty("Accept-Charset", "UTF-8");
-                con.setUseCaches(false);
-
-                DataOutputStream outputStream = new DataOutputStream(con.getOutputStream());
-                outputStream.writeBytes(twoHyphens + boundary + lineEnd);
-                outputStream.writeBytes("Content-Disposition: form-data; name=\"filename\";" + lineEnd);
-                outputStream.writeBytes(lineEnd);
-                outputStream.writeBytes("fff.png");
-                outputStream.writeBytes(lineEnd);
-                outputStream.writeBytes(twoHyphens + boundary + lineEnd);
-                outputStream.writeBytes("Content-Disposition: form-data; name=\"upfile\";filename=\"upfile.png\"" + lineEnd);
-                outputStream.writeBytes(lineEnd);
-                for (int i = 0; i < jpgarr.length; i++) {
-                    outputStream.writeByte(jpgarr[i]);
-                }
-                outputStream.writeBytes(lineEnd);
-                outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-                con.connect();
-
-                InputStream in = con.getInputStream();
-                InputStreamReader objReader = new InputStreamReader(in);
-                BufferedReader objBuf = new BufferedReader(objReader);
-                StringBuilder objStr = new StringBuilder();
-                String sLine;
-                while ((sLine = objBuf.readLine()) != null) {
-                    objStr.append(sLine);
-                }
-                //objStr.toString();//返り値
-                in.close();
-                objBuf.close();
+                new PostBmpAsyncHttpRequest((Activity) getContext()).execute(new Param("http://fuji-ch.cf:8000/send", bm));
+//
+//                //bitmapをjpegに変換
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                byte[] jpgarr = baos.toByteArray();
+//
+//                //jpeg変換後の値
+//                Log.d("tagJpeg", jpgarr.toString());
+//                Log.d("tagData", data.toString());
+//
+//                //画像データを送信
+//                String lineEnd = "\r\n";
+//                String twoHyphens = "--";
+//                String boundary = "*****";
+//
+//                HttpURLConnection con = null;
+//                // FIXME URLがないとここで処理が停止する。
+//                URL url = new URL("http://fuji-ch.cf:8000/send");
+//                con = (HttpURLConnection) url.openConnection();
+//                con.setRequestMethod("POST");
+//                con.setRequestProperty("Connection", "Keep-Alive");
+//                con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+//                con.setRequestProperty("Accept-Charset", "UTF-8");
+//                con.setUseCaches(false);
+//
+//                DataOutputStream outputStream = new DataOutputStream(con.getOutputStream());
+//                outputStream.writeBytes(twoHyphens + boundary + lineEnd);
+//                outputStream.writeBytes("Content-Disposition: form-data; name=\"filename\";" + lineEnd);
+//                outputStream.writeBytes(lineEnd);
+//                outputStream.writeBytes("fff.png");
+//                outputStream.writeBytes(lineEnd);
+//                outputStream.writeBytes(twoHyphens + boundary + lineEnd);
+//                outputStream.writeBytes("Content-Disposition: form-data; name=\"upfile\";filename=\"upfile.png\"" + lineEnd);
+//                outputStream.writeBytes(lineEnd);
+//                for (int i = 0; i < jpgarr.length; i++) {
+//                    outputStream.writeByte(jpgarr[i]);
+//                }
+//                outputStream.writeBytes(lineEnd);
+//                outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+//                con.connect();
+//
+//                InputStream in = con.getInputStream();
+//                InputStreamReader objReader = new InputStreamReader(in);
+//                BufferedReader objBuf = new BufferedReader(objReader);
+//                StringBuilder objStr = new StringBuilder();
+//                String sLine;
+//                while ((sLine = objBuf.readLine()) != null) {
+//                    objStr.append(sLine);
+//                }
+//                //objStr.toString();//返り値
+//                in.close();
+//                objBuf.close();
 
             } catch (Exception e) {
             }
