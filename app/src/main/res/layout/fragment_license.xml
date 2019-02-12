@@ -8,7 +8,81 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/ic_gorilla_black">
+        android:background="@color/ic_gorilla_background">
+
+        <ImageView
+            android:id="@+id/title_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="128dp"
+            android:src="@drawable/title"
+            app:layout_constraintBottom_toTopOf="@id/app_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/app_description"
+            android:layout_width="0dp"
+            android:layout_height="512dp"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_logo">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:gravity="center"
+                    android:text="「俺たちがゴリラだ。」\nこのアプリは撮影された画像から類似するゴリラを提示するアプリです。"
+                    android:textColor="@color/ic_gorilla_black"
+                    android:textSize="@dimen/description_text"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:text="開発者の声\n「オレ、ニンゲン。ヒト、トモダチ」\n「」\n「」"
+                    android:textColor="@color/ic_gorilla_black"
+                    android:textSize="@dimen/comment_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:text="Libraries\n- firebase (google)\n- navigation (google)\n- openCV 3.4 (opencv)"
+                    android:textColor="@color/ic_gorilla_black"
+                    android:textSize="@dimen/license_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:text="Android Developper\n- Taiga Nishimura (TaigaNatto)\n- Taketo Matsuda (Matsuda4101)"
+                    android:textColor="@color/ic_gorilla_black"
+                    android:textSize="@dimen/license_text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:text="Backend Developper\n- Ken Fujita (KenFujita)"
+                    android:textColor="@color/ic_gorilla_black"
+                    android:textSize="@dimen/license_text" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <Button
             android:id="@+id/btn_back"

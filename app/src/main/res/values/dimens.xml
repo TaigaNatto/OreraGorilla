@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="description_text">20sp</dimen>
+    <dimen name="comment_text">20sp</dimen>
+    <dimen name="license_text">16sp</dimen>
+</resources>

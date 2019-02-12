@@ -8,7 +8,7 @@
                 android:width="100dp"
                 android:height="100dp" />
             <!-- 背景色 -->
-            <solid android:color="@color/ic_gorilla_background" />
+            <solid android:color="@color/ic_gorilla_black" />
 
         </shape>
     </item>
@@ -24,10 +24,10 @@
                 android:width="100dp"
                 android:height="100dp" />
             <!-- 背景色 -->
-            <solid android:color="@color/ic_gorilla_background" />
+            <solid android:color="@color/ic_gorilla_black" />
             <stroke
                 android:width="6dp"
-                android:color="@color/ic_gorilla_black" />
+                android:color="@color/ic_gorilla_background" />
         </shape>
     </item>
 

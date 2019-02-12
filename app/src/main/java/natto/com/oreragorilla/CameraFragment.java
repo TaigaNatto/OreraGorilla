@@ -16,7 +16,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,6 +46,9 @@ public class CameraFragment extends Fragment {
     FireBaseRepository firebase;
     private String mId;
 
+    // Navigationに必要なview
+    private View view = null;
+
     public CameraFragment() {
         // Required empty public constructor
     }
@@ -56,11 +58,17 @@ public class CameraFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mId = SystemRepository.getDeviceId(Objects.requireNonNull(getContext()));
         firebase = new FireBaseRepository(mId);
+        firebase.initial();
         firebase.setValueEventListener(new ValueEventListener() {
             @SuppressLint("ShowToast")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Toast.makeText(getContext(), dataSnapshot.child("imageUrl").getValue().toString(), Toast.LENGTH_SHORT).show();
+                String imageUrl = dataSnapshot.child("imageUrl").getValue().toString();
+                if (!imageUrl.isEmpty() && view != null) {
+                    // データが空でなく、シャッターが押されている場合のみ遷移
+                    Navigation.findNavController(view).navigate(R.id.action_camera_to_result);
+                    view = null;
+                }
             }
 
             @Override
@@ -156,11 +164,8 @@ public class CameraFragment extends Fragment {
 
     class TakePictureCallback implements Camera.PictureCallback {
 
-        // Navigationに必要なview
-        private View view;
-
         public TakePictureCallback(View view) {
-            this.view = view;
+            CameraFragment.this.view = view;
         }
 
         @Override
@@ -182,10 +187,6 @@ public class CameraFragment extends Fragment {
                 fos.close();
                 cam.startPreview();
 
-                Navigation.findNavController(view).navigate(R.id.action_camera_to_result);
-
-                // todo 確か画像関係はエラーが出るのではなく処理が止まるので、URLができるまでここまでで書く。
-
                 //画像をbitmapに変換
                 Bitmap bm = BitmapFactory.decodeFile("/storage/emulated/0/Camera/img.jpg");
 
@@ -203,6 +204,7 @@ public class CameraFragment extends Fragment {
                 String boundary = "*****";
 
                 HttpURLConnection con = null;
+                // FIXME URLがないとここで処理が停止する。
                 URL url = new URL("");
                 con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("POST");
