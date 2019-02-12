@@ -36,7 +36,7 @@ public class ResultFragment extends Fragment {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_result, container, false);
         resultText = "写真評価";
-        resultPictureURL = "サイトのURL";
+        resultPictureURL = "http://fuji-ch.cf/~ec2-user/Android_picture20190212102119.jpg";
 
         final String strUrl = resultPictureURL;
         Glide.with(this).load(strUrl).into(binding.resultPicture);

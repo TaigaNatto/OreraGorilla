@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,16 +21,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Objects;
 
@@ -95,7 +86,7 @@ public class CameraFragment extends Fragment {
         binding.camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //オートフォーカス(機能してるかわからん)
+                //オートフォーカス
                 cam.autoFocus(null);
             }
         });
@@ -192,7 +183,7 @@ public class CameraFragment extends Fragment {
                 fos.write(data);
                 //Toast.makeText(getContext(), "写真を送信しました", Toast.LENGTH_LONG).show();
                 fos.close();
-                cam.startPreview();
+                //cam.startPreview();
 
                 //画像をbitmapに変換
                 Bitmap bm = BitmapFactory.decodeFile("/storage/emulated/0/Camera/img.jpg");
@@ -254,5 +245,14 @@ public class CameraFragment extends Fragment {
             } catch (Exception e) {
             }
         }
+    }
+
+    public void showLoading() {
+//        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
+//        binding.loadingImg.setAnimation(animation);
+    }
+
+    public void hideLoading() {
+
     }
 }
