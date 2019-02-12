@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -49,6 +50,8 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Assume thisActivity is the current activity
         mId = SystemRepository.getDeviceId(Objects.requireNonNull(getContext()));
         firebase = new FireBaseRepository(mId);
         firebase.initial();
@@ -78,7 +81,10 @@ public class CameraFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false);
+
+        binding.loading.setVisibility(View.INVISIBLE);
 
         sv = new SurfaceView(getContext());
         sh = sv.getHolder();
@@ -155,6 +161,8 @@ public class CameraFragment extends Fragment {
     class TakePictureClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            binding.loading.setVisibility(View.VISIBLE);
+            Glide.with(getContext()).asGif().load(R.drawable.loading).into(binding.loadingPicture);
             cam.takePicture(null, null, new TakePictureCallback(v));
         }
     }
