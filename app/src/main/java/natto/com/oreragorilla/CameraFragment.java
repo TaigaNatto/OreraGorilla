@@ -56,6 +56,8 @@ public class CameraFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Assume thisActivity is the current activity
         mId = SystemRepository.getDeviceId(Objects.requireNonNull(getContext()));
         firebase = new FireBaseRepository(mId);
         firebase.initial();
@@ -81,6 +83,7 @@ public class CameraFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_camera, container, false);
 
         sv = new SurfaceView(getContext());
