@@ -56,6 +56,7 @@ public class CameraFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mId = SystemRepository.getDeviceId(Objects.requireNonNull(getContext()));
         firebase = new FireBaseRepository(mId);
+        firebase.initial();
         firebase.setValueEventListener(new ValueEventListener() {
             @SuppressLint("ShowToast")
             @Override
