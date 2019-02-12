@@ -36,6 +36,10 @@
         android:id="@+id/resultFragment"
         android:name="natto.com.oreragorilla.ResultFragment"
         android:label="fragment_result"
-        tools:layout="@layout/fragment_result"></fragment>
+        tools:layout="@layout/fragment_result">
+        <action
+            android:id="@+id/action_resultFragment_to_cameraFragment"
+            app:destination="@+id/cameraFragment" />
+    </fragment>
 
 </navigation>
