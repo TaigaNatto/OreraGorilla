@@ -6,12 +6,6 @@
     android:layout_height="match_parent">
 
     <item
-        android:drawable="@color/ic_gorilla_background"/>
-
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/title"/>
-    </item>
+        android:drawable="@color/color_white"/>
 
 </layer-list>

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import androidx.navigation.Navigation;
 import natto.com.oreragorilla.databinding.FragmentResultBinding;
@@ -35,13 +36,15 @@ public class ResultFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_result, container, false);
-        float percent=getArguments().getFloat("percent");
-        String message=" | ゴリラになるならオレラゴリラ";
-        resultText = getReviewMessage(percent)+message;
+        float percent = getArguments().getFloat("percent");
+        final String message = "\n| ゴリラになるならオレラゴリラ";
+        resultText = getReviewMessage(percent);
         resultPictureURL = getArguments().getString("imageUrl");
 
         final String strUrl = resultPictureURL;
-        Glide.with(this).load(strUrl).into(binding.resultPicture);
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.placeholder(R.color.ic_gorilla_black);
+        Glide.with(this).load(strUrl).apply(requestOptions).into(binding.resultPicture);
 
         binding.resultText.setText(resultText);
 
@@ -58,7 +61,7 @@ public class ResultFragment extends Fragment {
                 //結果をシェア
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("text/plain");
-                i.putExtra(Intent.EXTRA_TEXT, resultText + "\n" + strUrl);
+                i.putExtra(Intent.EXTRA_TEXT, resultText + message + "\n" + strUrl);
                 startActivity(Intent.createChooser(i, "結果をシェア！"));
             }
         });
@@ -77,14 +80,14 @@ public class ResultFragment extends Fragment {
         super.onDetach();
     }
 
-    public String getReviewMessage(float percent){
-        if(percent>0.9){
+    public String getReviewMessage(float percent) {
+        if (percent > 0.9) {
             return "完全にゴリラ。野生に帰りましょう。";
-        }else if(percent>0.75){
+        } else if (percent > 0.75) {
             return "ほぼゴリラ。かろうじて人間を保ってる。";
         } else if (percent > 0.5) {
             return "わりとゴリラ。わりと似てる。";
-        }else if(percent>0.25){
+        } else if (percent > 0.25) {
             return "ちょいゴリラ。自覚はない。";
         }
         return "ゴリラではない。人の世で生きていきましょう。";

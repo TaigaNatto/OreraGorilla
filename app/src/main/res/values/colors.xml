@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#828282</color>
 
+    <color name="color_white">#FFFFFF</color>
+
     <color name="color_shutter_ripple">#FFFFFF</color>
 
     <color name="color_loading_bg">#33000000</color>
